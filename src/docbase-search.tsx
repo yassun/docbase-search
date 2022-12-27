@@ -19,6 +19,7 @@ export default function Command(props: Props) {
   const preferences = getPreferenceValues<Preferences>();
   const [searchKeyword, setSearchKeyword] = useState(props.arguments.keyword || "")
   const [posts, setPosts] = useState<PostItem[]>([])
+  const resultInfo = searchKeyword ? ( posts ? `${posts?.length} posts` : `searching for ${searchKeyword}`)  : "search for posts...";
 
   useEffect(() => {
     const options: AxiosRequestConfig = {
@@ -45,6 +46,7 @@ export default function Command(props: Props) {
       onSearchTextChange={setSearchKeyword}
       throttle
     >
+      <List.Item title="" subtitle={resultInfo} />
       <List.Section title="Result">
         {posts?.map((item) => {
           return (
