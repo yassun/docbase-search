@@ -1,4 +1,4 @@
-import { List, Action, ActionPanel, getPreferenceValues, showToast, Toast } from "@raycast/api";
+import { List, Action, ActionPanel, getPreferenceValues, showToast, Toast, Icon } from "@raycast/api";
 import { useState, useEffect } from "react";
 import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from "axios";
 
@@ -14,7 +14,9 @@ type Props = {
 };
 
 // ref. https://help.docbase.io/posts/45703
-type PostItem = { id: number; title: string; body: string; url: string };
+type Tag = { name: string };
+type User = { name: string; profile_image_url: string };
+type PostItem = { id: number; title: string; body: string; url: string; tags: Tag[]; user: User };
 
 export default function Command(props: Props) {
   const preferences = getPreferenceValues<Preferences>();
@@ -56,6 +58,11 @@ export default function Command(props: Props) {
           return (
             <List.Item
               key={item.id}
+              icon={{ source: Icon.Document }}
+              accessories={[
+                { icon: Icon.Tag, text: item.tags.map((x) => x.name).join(",") },
+                { icon: item.user.profile_image_url, tooltip: item.user.name },
+              ]}
               title={item.title}
               actions={
                 <ActionPanel>
